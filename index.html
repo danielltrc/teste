@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Informações de Serviços</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h3 {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 12px;
+            margin: 20px 0 10px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            width: auto;
+            min-width: 150px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            /* Use 'white-space: pre-line;' para quebra de linha do texto, mas mantenha a formatação do HTML */
+            white-space: pre-line; 
+            display: none;
+            font-family: monospace;
+            overflow-x: auto; /* Para rolagem horizontal se o conteúdo for muito largo */
+        }
+        .hidden {
+            display: none;
+        }
+        .service-fields {
+            display: none;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .service-fields.active {
+            display: block;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            color: #777;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de Informações de Serviços</h1>
+
+        <div class="form-group">
+            <label for="service-type">Tipo de Serviço:</label>
+            <select id="service-type" onchange="showServiceFields()">
+                <option value="">Selecione um serviço</option>
+                <option value="l2l">TRANSPORTE L2L</option>
+                <option value="transito-ip">TRÂNSITO IP</option>
+                <option value="ptt">PTT (CE-MA-PI-SP)</option>
+                <option value="ip-dedicado">IP DEDICADO</option>
+                <option value="banda-larga">BANDA LARGA</option> 
+            </select>
+        </div>
+
+        <div id="l2l-fields" class="service-fields">
+            <h3>TRANSPORTE L2L</h3>
+            <div class="form-group">
+                <label for="l2l-contato-cliente">Contato do Cliente:</label>
+                <input type="text" id="l2l-contato-cliente">
+            </div>
+            <div class="form-group">
+                <label for="l2l-banda-contratada">BANDA CONTRATADA:</label>
+                <input type="text" id="l2l-banda-contratada">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-a-cidade">PONTA A - Cidade:</label>
+                <input type="text" id="l2l-ponta-a-cidade">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-a-equipamento">PONTA A - Equipamento:</label>
+                <input type="text" id="l2l-ponta-a-equipamento">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-a-ip">PONTA A - IP:</label>
+                <input type="text" id="l2l-ponta-a-ip">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-a-interface">PONTA A - Interface:</label>
+                <input type="text" id="l2l-ponta-a-interface">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-a-responsabilidade">PONTA A - Responsabilidade do cabo:</label>
+                <input type="text" id="l2l-ponta-a-responsabilidade">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-b-cidade">PONTA B - Cidade:</label>
+                <input type="text" id="l2l-ponta-b-cidade">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-b-equipamento">PONTA B - Equipamento:</label>
+                <input type="text" id="l2l-ponta-b-equipamento">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-b-ip">PONTA B - IP:</label>
+                <input type="text" id="l2l-ponta-b-ip">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-b-interface">PONTA B - Interface:</label>
+                <input type="text" id="l2l-ponta-b-interface">
+            </div>
+            <div class="form-group">
+                <label for="l2l-ponta-b-responsabilidade">PONTA B - Responsabilidade do cabo:</label>
+                <input type="text" id="l2l-ponta-b-responsabilidade">
+            </div>
+            <div class="form-group">
+                <label for="l2l-cnpj">CNPJ:</label>
+                <input type="text" id="l2l-cnpj">
+            </div>
+            <div class="form-group">
+                <label for="l2l-vlan">VLAN:</label>
+                <input type="text" id="l2l-vlan">
+            </div>
+            <div class="form-group">
+                <label for="l2l-entrega">MODO DE ENTREGA:</label>
+                <input type="text" id="l2l-entrega">
+            </div>
+            <div class="form-group">
+                <label for="l2l-id-hubsoft">ID Hubsoft:</label>
+                <input type="text" id="l2l-id-hubsoft">
+            </div>
+            <div class="form-group">
+                <label for="l2l-observacoes">Outras Observações:</label>
+                <textarea id="l2l-observacoes"></textarea>
+            </div>
+        </div>
+
+        <div id="transito-ip-fields" class="service-fields">
+            <h3>TRÂNSITO IP</h3>
+            <div class="form-group">
+                <label for="transito-ip-contato-cliente">Contato do Cliente:</label>
+                <input type="text" id="transito-ip-contato-cliente">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-banda-contratada">BANDA CONTRATADA:</label>
+                <input type="text" id="transito-ip-banda-contratada">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-capacidade">ASN (ex:12345):</label>
+                <input type="text" id="transito-ip-capacidade">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-cnpj">CNPJ:</label>
+                <input type="text" id="transito-ip-cnpj">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-id-hubsoft">ID Hubsoft:</label>
+                <input type="text" id="transito-ip-id-hubsoft">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-equipamento">Equipamento:</label>
+                <input type="text" id="transito-ip-equipamento">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-interface">Interface:</label>
+                <input type="text" id="transito-ip-interface">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-entrega">MODO DE ENTREGA:</label>
+                <input type="text" id="transito-ip-entrega">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-vlan">VLAN:</label>
+                <input type="text" id="transito-ip-vlan">
+            </div>
+            <div class="form-group">
+                <label for="transito-ip-observacoes">Outras Observações:</label>
+                <textarea id="transito-ip-observacoes"></textarea>
+            </div>
+        </div>
+
+        <div id="ptt-fields" class="service-fields">
+            <h3>PTT (CE-MA-PI-SP)</h3>
+            <div class="form-group">
+                <label for="ptt-contato-cliente">Contato do Cliente:</label>
+                <input type="text" id="ptt-contato-cliente">
+            </div>
+            <div class="form-group">
+                <label for="ptt-banda-contratada">BANDA CONTRATADA:</label>
+                <input type="text" id="ptt-banda-contratada">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ix">PTT (IX):</label>
+                <select id="ptt-ix">
+                    <option value="">Selecione um PTT</option>
+                    <option value="SÃO PAULO">SÃO PAULO</option>
+                    <option value="CEARÁ">CEARÁ</option>
+                    <option value="MARANHÃO">MARANHÃO</option>
+                    <option value="PIAUÍ">PIAUÍ</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-a-cidade">PONTA A - Cidade:</label>
+                <input type="text" id="ptt-ponta-a-cidade">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-a-equipamento">PONTA A - Equipamento:</label>
+                <input type="text" id="ptt-ponta-a-equipamento">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-a-ip">PONTA A - IP:</label>
+                <input type="text" id="ptt-ponta-a-ip">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-a-interface">PONTA A - Interface:</label>
+                <input type="text" id="ptt-ponta-a-interface">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-b-cidade">PONTA B - Cidade:</label>
+                <input type="text" id="ptt-ponta-b-cidade">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-b-equipamento">PONTA B - Equipamento:</label>
+                <input type="text" id="ptt-ponta-b-equipamento">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-b-ip">PONTA B - IP:</label>
+                <input type="text" id="ptt-ponta-b-ip">
+            </div>
+            <div class="form-group">
+                <label for="ptt-ponta-b-interface">PONTA B - Interface:</label>
+                <input type="text" id="ptt-ponta-b-interface">
+            </div>
+            <div class="form-group">
+                <label for="ptt-cnpj">CNPJ:</label>
+                <input type="text" id="ptt-cnpj">
+            </div>
+            <div class="form-group">
+                <label for="ptt-vlan">VLAN:</label>
+                <input type="text" id="ptt-vlan">
+            </div>
+            <div class="form-group">
+                <label for="ptt-observacoes">Outras Observações:</label>
+                <textarea id="ptt-observacoes"></textarea>
+            </div>
+        </div>
+
+        <div id="ip-dedicado-fields" class="service-fields">
+            <h3>IP DEDICADO</h3>
+            <div class="form-group">
+                <label for="ip-dedicado-contato-cliente">Contato do Cliente:</label>
+                <input type="text" id="ip-dedicado-contato-cliente">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-banda-contratada">BANDA CONTRATADA:</label>
+                <input type="text" id="ip-dedicado-banda-contratada">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-capacidade">BLOCO CONTRATADO (Ex: /30):</label>
+                <input type="text" id="ip-dedicado-capacidade">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-cnpj">CNPJ:</label>
+                <input type="text" id="ip-dedicado-cnpj">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-id-hubsoft">ID Hubsoft:</label>
+                <input type="text" id="ip-dedicado-id-hubsoft">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-equipamento">Equipamento:</label>
+                <input type="text" id="ip-dedicado-equipamento">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-ip">IP:</label>
+                <input type="text" id="ip-dedicado-ip">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-portas">Portas:</label>
+                <input type="text" id="ip-dedicado-portas">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-vlan">VLAN:</label>
+                <input type="text" id="ip-dedicado-vlan">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-entrega">MODO DE ENTREGA:</label>
+                <input type="text" id="ip-dedicado-entrega">
+            </div>
+            <div class="form-group">
+                <label for="ip-dedicado-observacoes">Outras Observações:</label>
+                <textarea id="ip-dedicado-observacoes"></textarea>
+            </div>
+        </div>
+        
+        <div id="banda-larga-fields" class="service-fields">
+            <h3>BANDA LARGA</h3>
+            <div class="form-group">
+                <label for="banda-larga-contato-cliente">Contato do Cliente:</label>
+                <input type="text" id="banda-larga-contato-cliente">
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-banda-contratada">BANDA LARGA (ex: 100MB):</label>
+                <input type="text" id="banda-larga-banda-contratada">
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-cnpj">CNPJ:</label>
+                <input type="text" id="banda-larga-cnpj">
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-id-hubsoft">ID Hubsoft:</label>
+                <input type="text" id="banda-larga-id-hubsoft">
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-responsabilidade">Responsabilidade do cabo:</label>
+                <input type="text" id="banda-larga-responsabilidade">
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-cidade">Cidade de Atendimento:</label>
+                <input type="text" id="banda-larga-cidade">
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-endereco">Endereço:</label>
+                <textarea id="banda-larga-endereco"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-localizacao">Localização:</label>
+                <input type="text" id="banda-larga-localizacao">
+            </div>
+            <div class="form-group">
+                <label for="banda-larga-observacoes">Outras Observações:</label>
+                <textarea id="banda-larga-observacoes"></textarea>
+            </div>
+        </div>
+
+        <button onclick="generateService()">Gerar Informações</button>
+    </div>
+
+    <div id="output" class="hidden"></div>
+
+    <footer>
+        <center>Desenvolvido por Daniel Silva - Analista de Redes - Suporte B2B</center>
+    </footer>
+
+    <script>
+        function showServiceFields() {
+            const serviceType = document.getElementById("service-type").value;
+            document.querySelectorAll(".service-fields").forEach(field => {
+                field.classList.remove("active");
+            });
+            if (serviceType) {
+                document.getElementById(`${serviceType}-fields`).classList.add("active");
+            }
+        }
+
+        function generateService() {
+            const serviceType = document.getElementById("service-type").value;
+            let output = "";
+            let observacoes = "";
+            let contatoCliente = ""; 
+
+            // Lógica para obter os dados com base no tipo de serviço selecionado
+            switch (serviceType) {
+                case "l2l":
+                    contatoCliente = document.getElementById("l2l-contato-cliente").value;
+                    observacoes = document.getElementById("l2l-observacoes").value;
+                    const l2lBandaContratada = document.getElementById("l2l-banda-contratada").value;
+                    const l2lPontaACidade = document.getElementById("l2l-ponta-a-cidade").value;
+                    const l2lPontaAEquipamento = document.getElementById("l2l-ponta-a-equipamento").value;
+                    const l2lPontaAIP = document.getElementById("l2l-ponta-a-ip").value;
+                    const l2lPontaAInterface = document.getElementById("l2l-ponta-a-interface").value;
+                    const l2lPontaAResponsabilidade = document.getElementById("l2l-ponta-a-responsabilidade").value;
+                    const l2lPontaBCidade = document.getElementById("l2l-ponta-b-cidade").value;
+                    const l2lPontaBEquipamento = document.getElementById("l2l-ponta-b-equipamento").value;
+                    const l2lPontaBIP = document.getElementById("l2l-ponta-b-ip").value;
+                    const l2lPontaBInterface = document.getElementById("l2l-ponta-b-interface").value;
+                    const l2lPontaBResponsabilidade = document.getElementById("l2l-ponta-b-responsabilidade").value;
+                    const l2lCnpj = document.getElementById("l2l-cnpj").value;
+                    const l2lVlan = document.getElementById("l2l-vlan").value;
+                    const l2lEntrega = document.getElementById("l2l-entrega").value;
+                    const l2lIdHubsoft = document.getElementById("l2l-id-hubsoft").value;
+                    
+                    output = `TRANSPORTE L2L
+
+- - - - - - - -Serviços a serem realizados- - - - - - - - -
+L2L
+
+${contatoCliente ? `CONTATO DO CLIENTE: ${contatoCliente}\n\n` : ''}BANDA CONTRATADA: ${l2lBandaContratada}
+
+PONTA A:
+Cidade: ${l2lPontaACidade}
+Equipamento: ${l2lPontaAEquipamento}${l2lPontaAIP ? ` - ${l2lPontaAIP}` : ''}
+Interface: ${l2lPontaAInterface}
+Responsabilidade do cabo: ${l2lPontaAResponsabilidade}
+
+PONTA B:
+Cidade: ${l2lPontaBCidade}
+Equipamento: ${l2lPontaBEquipamento}${l2lPontaBIP ? ` - ${l2lPontaBIP}` : ''}
+Interface: ${l2lPontaBInterface}
+Responsabilidade do cabo: ${l2lPontaBResponsabilidade}
+
+*OBS*
+CNPJ: ${l2lCnpj}
+VLAN: ${l2lVlan}
+MODO DE ENTREGA: ${l2lEntrega}
+ID Hubsoft: ${l2lIdHubsoft}`;
+                    break;
+
+                case "transito-ip":
+                    contatoCliente = document.getElementById("transito-ip-contato-cliente").value;
+                    observacoes = document.getElementById("transito-ip-observacoes").value;
+                    const transitoIpBandaContratada = document.getElementById("transito-ip-banda-contratada").value;
+                    const transitoIpCapacidade = document.getElementById("transito-ip-capacidade").value;
+                    const transitoIpCnpj = document.getElementById("transito-ip-cnpj").value;
+                    const transitoIpIdHubsoft = document.getElementById("transito-ip-id-hubsoft").value;
+                    const transitoIpEquipamento = document.getElementById("transito-ip-equipamento").value;
+                    const transitoIpInterface = document.getElementById("transito-ip-interface").value;
+                    const transitoIpEntrega = document.getElementById("transito-ip-entrega").value;
+                    const transitoIpVlan = document.getElementById("transito-ip-vlan").value;
+
+                    output = `TRÂNSITO IP
+
+- - - - - - - -Serviços a serem realizados- - - - - - - - -
+${contatoCliente ? `CONTATO DO CLIENTE: ${contatoCliente}\n\n` : ''}ASN: ${transitoIpCapacidade}
+BANDA CONTRATADA: ${transitoIpBandaContratada}
+CNPJ: ${transitoIpCnpj}
+ID Hubsoft: ${transitoIpIdHubsoft}
+
+Equipamento: ${transitoIpEquipamento}
+Interface: ${transitoIpInterface}
+Responsabilidade do cabo: Cliente
+
+OBS:
+MODO DE ENTREGA: ${transitoIpEntrega}
+VLAN: ${transitoIpVlan}`;
+                    break;
+
+                case "ptt":
+                    contatoCliente = document.getElementById("ptt-contato-cliente").value;
+                    observacoes = document.getElementById("ptt-observacoes").value;
+                    const pttBandaContratada = document.getElementById("ptt-banda-contratada").value;
+                    const pttIX = document.getElementById("ptt-ix").value; // Obter o valor selecionado do PTT
+                    const pttPontaACidade = document.getElementById("ptt-ponta-a-cidade").value;
+                    const pttPontaAEquipamento = document.getElementById("ptt-ponta-a-equipamento").value;
+                    const pttPontaAIP = document.getElementById("ptt-ponta-a-ip").value;
+                    const pttPontaAInterface = document.getElementById("ptt-ponta-a-interface").value;
+                    const pttPontaBCidade = document.getElementById("ptt-ponta-b-cidade").value;
+                    const pttPontaBEquipamento = document.getElementById("ptt-ponta-b-equipamento").value;
+                    const pttPontaBIP = document.getElementById("ptt-ponta-b-ip").value;
+                    const pttPontaBInterface = document.getElementById("ptt-ponta-b-interface").value;
+                    const pttCnpj = document.getElementById("ptt-cnpj").value;
+                    const pttVlan = document.getElementById("ptt-vlan").value;
+
+                    output = `PTT(CE-MA-PI-SP)
+
+- - - - - - - -Serviços a serem realizados- - - - - - - - -
+${contatoCliente ? `CONTATO DO CLIENTE: ${contatoCliente}\n\n` : ''}IX ${pttIX}
+BANDA CONTRATADA: ${pttBandaContratada}
+
+PONTA A:
+Cidade: ${pttPontaACidade}
+Equipamento: ${pttPontaAEquipamento}${pttPontaAIP ? ` - ${pttPontaAIP}` : ''}
+Interface: ${pttPontaAInterface}
+
+PONTA B:
+Cidade: ${pttPontaBCidade}
+Equipamento: ${pttPontaBEquipamento}${pttPontaBIP ? ` - ${pttPontaBIP}` : ''}
+Interface: ${pttPontaBInterface}
+
+*OBS*
+CNPJ: ${pttCnpj}
+VLAN: ${pttVlan}`;
+                    break;
+
+                case "ip-dedicado":
+                    contatoCliente = document.getElementById("ip-dedicado-contato-cliente").value;
+                    observacoes = document.getElementById("ip-dedicado-observacoes").value;
+                    const ipDedicadoBandaContratada = document.getElementById("ip-dedicado-banda-contratada").value;
+                    const ipDedicadoCapacidade = document.getElementById("ip-dedicado-capacidade").value;
+                    const ipDedicadoCnpj = document.getElementById("ip-dedicado-cnpj").value;
+                    const ipDedicadoIdHubsoft = document.getElementById("ip-dedicado-id-hubsoft").value;
+                    const ipDedicadoEquipamento = document.getElementById("ip-dedicado-equipamento").value;
+                    const ipDedicadoIP = document.getElementById("ip-dedicado-ip").value;
+                    const ipDedicadoPortas = document.getElementById("ip-dedicado-portas").value;
+                    const ipDedicadoVlan = document.getElementById("ip-dedicado-vlan").value;
+                    const ipDedicadoEntrega = document.getElementById("ip-dedicado-entrega").value;
+
+                    output = `IP DEDICADO (BLOCO CONTRATADO) ${ipDedicadoCapacidade}
+
+---- Serviços a serem ativados ----
+${contatoCliente ? `CONTATO DO CLIENTE: ${contatoCliente}\n\n` : ''}BANDA CONTRATADA: ${ipDedicadoBandaContratada}
+CNPJ: ${ipDedicadoCnpj}
+ID HUBSOFT: ${ipDedicadoIdHubsoft}
+
+Equipamento: ${ipDedicadoEquipamento}${ipDedicadoIP ? ` - ${ipDedicadoIP}` : ''}
+Portas: ${ipDedicadoPortas}
+
+OBS:
+VLAN: ${ipDedicadoVlan}
+MODO DE ENTREGA: ${ipDedicadoEntrega}`;
+                    break;
+
+                case "banda-larga":
+                    contatoCliente = document.getElementById("banda-larga-contato-cliente").value;
+                    observacoes = document.getElementById("banda-larga-observacoes").value;
+                    const bandaLargaBandaContratada = document.getElementById("banda-larga-banda-contratada").value;
+                    const bandaLargaCnpj = document.getElementById("banda-larga-cnpj").value;
+                    const bandaLargaIdHubsoft = document.getElementById("banda-larga-id-hubsoft").value;
+                    const bandaLargaResponsabilidade = document.getElementById("banda-larga-responsabilidade").value;
+                    const bandaLargaCidade = document.getElementById("banda-larga-cidade").value;
+                    const bandaLargaEndereco = document.getElementById("banda-larga-endereco").value;
+                    const bandaLargaLocalizacao = document.getElementById("banda-larga-localizacao").value;
+
+                    output = `---- Serviços a serem realizados ----
+${contatoCliente ? `CONTATO DO CLIENTE: ${contatoCliente}\n\n` : ''}BANDA LARGA ${bandaLargaBandaContratada}
+CNPJ: ${bandaLargaCnpj}
+ID Hubsoft: ${bandaLargaIdHubsoft}
+Responsabilidade do cabo: ${bandaLargaResponsabilidade}
+
+Cliente será atendido via rede FTTH da Megalink na cidade de ${bandaLargaCidade}
+Endereço: ${bandaLargaEndereco}
+Localização: ${bandaLargaLocalizacao}`;
+                    break;
+
+                default:
+                    alert("Selecione um tipo de serviço!");
+                    return;
+            }
+
+            // Adiciona as observações, se existirem
+            if (observacoes) {
+                output += `\n\n**Outras Observações:**\n${observacoes}`;
+            } else if (serviceType === "banda-larga") { // Para Banda Larga, sempre inclui "OBS:" mesmo que vazia
+                output += `\n\n**OBS:**`;
+            }
+
+            displayOutput(output);
+        }
+
+        function displayOutput(text) {
+            const outputDiv = document.getElementById("output");
+            outputDiv.textContent = text;
+            outputDiv.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
